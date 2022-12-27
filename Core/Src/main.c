@@ -125,7 +125,7 @@ int main(void)
     	  //ve hinh tron
     	    BSP_LCD_DrawCircle(BSP_LCD_GetXSize() - 120, 160, 30);
     	    BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, 160, 30);
-    	  //Test KIT de xem no ve hinh tron nhu nao roi minh se set lai gia tri cho no hop ly
+    	  
     	    sprintf(str,"%d",count_score);
     	  //hien thi diem dat duoc tren man hinh
     	  //noi ket chuoi
