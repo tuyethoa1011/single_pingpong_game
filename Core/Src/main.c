@@ -162,9 +162,39 @@ int main(void)
   Task05Handle = osThreadCreate(osThread(Task05), NULL);
 
 
+<<<<<<< HEAD
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
+=======
+      BSP_LCD_SetTextColor(LCD_COLOR_WHITE); //mau cua bong mau trang
+      BSP_LCD_SetFont(&Font20); //set kich thuoc font cho viec hien thi text ra man hinh LCD
+      BSP_LCD_GetFont();
+  
+      //khoi tao Gyroscope
+      BSP_GYRO_Init();
+      /* USER CODE END 2 */
+       int count_score = 0; //khởi tạo biến tính điểm trò chơi
+    	 char str[10]; //mang tam chua chuoi diem de chuyen doi int sang char
+    	 uint8_t display_score[] = "Score:"; //chuỗi hiển thị điểm số đạt được ra màn hình LCD
+       /* Infinite loop */
+      /* USER CODE BEGIN WHILE */
+      while (1)
+      {
+    	  /* USER CODE END WHILE */
+    	  //----- BEGIN GIAO DIEN BAN DAU -----
+    	  //o giao dien ban dau day la trang thai can bang cua bong
+    	  //ve hinh tron
+    	    BSP_LCD_DrawCircle(BSP_LCD_GetXSize() - 120, 160, 30);
+    	    BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, 160, 30);
+    	  
+    	    sprintf(str,"%d",count_score);
+    	  //hien thi diem dat duoc tren man hinh
+    	  //noi ket chuoi
+    	  //BSP_LCD_DisplayStringAtLine(1,display_score);
+    	    BSP_LCD_DisplayStringAt(11,13,display_score,LEFT_MODE);
+    	    BSP_LCD_DisplayStringAt(100,13,(uint8_t*)str,LEFT_MODE);
+>>>>>>> c45d3814ae9702d051fde9141086e01450b676c6
 
   /* Start scheduler */
   osKernelStart();
