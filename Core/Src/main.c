@@ -397,7 +397,7 @@ void Task02_Init(void const * argument)
   for(;;)
   {
 
-	if(xyz_ang_rate[0] >= 0){
+    if(xyz_ang_rate[0] >= 0){
 
     if(xyz_ang_rate[0] <= 25) //trang thai luc bong chua duoc tang - trang thai can bang
     {
@@ -406,14 +406,14 @@ void Task02_Init(void const * argument)
     	BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, 160, 25);
 
 
-  	  sprintf(str,"%d",count_score);
-  	  //hien thi diem dat duoc tren man hinh
-  	  //noi ket chuoi
-  	  //BSP_LCD_DisplayStringAtLine(1,display_score);
-  	  BSP_LCD_DisplayStringAt(11,13,display_score,LEFT_MODE);
+  	sprintf(str,"%d",count_score);
+  	//hien thi diem dat duoc tren man hinh
+  	//noi ket chuoi
+  	//BSP_LCD_DisplayStringAtLine(1,display_score);
+  	BSP_LCD_DisplayStringAt(11,13,display_score,LEFT_MODE);
+	BSP_LCD_DisplayStringAt(100,13,(uint8_t*)str,LEFT_MODE);
 
-
-  	  osDelay(50);
+  	osDelay(50);
 
     }
     else //truong hop bong da duoc tang len
@@ -431,7 +431,7 @@ void Task02_Init(void const * argument)
     	//-- ket thuc set max height
 
  
-		  flag = 1; //flag co de nhan biet khi nao bong duoc tang len va tinh diem
+	flag = 1; //flag co de nhan biet khi nao bong duoc tang len va tinh diem
     	while(height!=25){
 
     		if(count_height == height) break;
