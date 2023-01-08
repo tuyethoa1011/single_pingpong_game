@@ -12,6 +12,7 @@ RM := rm -rf
 -include USB_DEVICE/Target/subdir.mk
 -include USB_DEVICE/App/subdir.mk
 -include Middlewares/USB_Device_Library/subdir.mk
+-include Middlewares/FreeRTOS/subdir.mk
 -include Drivers/STM32F4xx_HAL_Driver/subdir.mk
 -include Drivers/BSP/STM32F429I-Discovery/subdir.mk
 -include Drivers/BSP/Components/wm8994/subdir.mk
@@ -65,34 +66,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := single_pingpong_game
+BUILD_ARTIFACT_NAME := pingpong_game
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-single_pingpong_game.elf \
+pingpong_game.elf \
 
 MAP_FILES += \
-single_pingpong_game.map \
+pingpong_game.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-single_pingpong_game.list \
+pingpong_game.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: single_pingpong_game.elf secondary-outputs
+main-build: pingpong_game.elf secondary-outputs
 
 # Tool invocations
-single_pingpong_game.elf single_pingpong_game.map: $(OBJS) $(USER_OBJS) E:\stm32_workingsspace\single_pingpong_game\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "single_pingpong_game.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\stm32_workingsspace\single_pingpong_game\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="single_pingpong_game.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+pingpong_game.elf pingpong_game.map: $(OBJS) $(USER_OBJS) E:\stm32_workingsspace\pingpong_game\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "pingpong_game.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\stm32_workingsspace\pingpong_game\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="pingpong_game.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -101,14 +102,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-single_pingpong_game.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "single_pingpong_game.list"
+pingpong_game.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "pingpong_game.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout single_pingpong_game.elf single_pingpong_game.list single_pingpong_game.map
+	-$(RM) default.size.stdout pingpong_game.elf pingpong_game.list pingpong_game.map
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

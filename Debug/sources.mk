@@ -52,6 +52,7 @@ Drivers/BSP/Components/ts3510 \
 Drivers/BSP/Components/wm8994 \
 Drivers/BSP/STM32F429I-Discovery \
 Drivers/STM32F4xx_HAL_Driver \
+Middlewares/FreeRTOS \
 Middlewares/USB_Device_Library \
 USB_DEVICE/App \
 USB_DEVICE/Target \

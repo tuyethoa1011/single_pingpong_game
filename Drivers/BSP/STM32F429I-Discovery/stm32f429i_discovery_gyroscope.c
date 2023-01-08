@@ -83,51 +83,13 @@ uint8_t BSP_GYRO_Init(void)
   GYRO_InitTypeDef         Gyro_InitStructure;
   GYRO_FilterConfigTypeDef Gyro_FilterStructure = {0,0};
 
-  if((L3gd20Drv.ReadID() == I_AM_L3GD20) || (L3gd20Drv.ReadID() == I_AM_L3GD20_TR))
+  if(I3g4250Drv.ReadID() == I_AM_I3G4250D)
   {	
-    /* Initialize the gyroscope driver structure */
-    GyroscopeDrv = &L3gd20Drv;
-
-    /* MEMS configuration ----------------------------------------------------*/
-    /* Fill the gyroscope structure */
-    Gyro_InitStructure.Power_Mode       = L3GD20_MODE_ACTIVE;
-    Gyro_InitStructure.Output_DataRate  = L3GD20_OUTPUT_DATARATE_1;
-    Gyro_InitStructure.Axes_Enable      = L3GD20_AXES_ENABLE;
-    Gyro_InitStructure.Band_Width       = L3GD20_BANDWIDTH_4;
-    Gyro_InitStructure.BlockData_Update = L3GD20_BlockDataUpdate_Continous;
-    Gyro_InitStructure.Endianness       = L3GD20_BLE_LSB;
-    Gyro_InitStructure.Full_Scale       = L3GD20_FULLSCALE_500;
-
-    /* Configure MEMS: data rate, power mode, full scale and axes */
-    ctrl = (uint16_t) (Gyro_InitStructure.Power_Mode  | Gyro_InitStructure.Output_DataRate | \
-                       Gyro_InitStructure.Axes_Enable | Gyro_InitStructure.Band_Width);
-
-    ctrl |= (uint16_t) ((Gyro_InitStructure.BlockData_Update | Gyro_InitStructure.Endianness | \
-                         Gyro_InitStructure.Full_Scale) << 8);
-    
-    /* Initialize the gyroscope */
-    GyroscopeDrv->Init(ctrl);
-
-    Gyro_FilterStructure.HighPassFilter_Mode_Selection   = L3GD20_HPM_NORMAL_MODE_RES;
-    Gyro_FilterStructure.HighPassFilter_CutOff_Frequency = L3GD20_HPFCF_0;
-
-    ctrl = (uint8_t) ((Gyro_FilterStructure.HighPassFilter_Mode_Selection |\
-                       Gyro_FilterStructure.HighPassFilter_CutOff_Frequency));
-
-    /* Configure the gyroscope main parameters */
-    GyroscopeDrv->FilterConfig(ctrl) ;
-
-    GyroscopeDrv->FilterCmd(L3GD20_HIGHPASSFILTER_ENABLE);
-
-    ret = GYRO_OK;
-  }
-#if defined(USE_STM32F429I_DISCOVERY_REVD)
-  else if (I3g4250Drv.ReadID() == I_AM_I3G4250D)
-  {
     /* Initialize the gyroscope driver structure */
     GyroscopeDrv = &I3g4250Drv;
 
-    /* Configure Mems : data rate, power mode, full scale and axes */
+    /* MEMS configuration ----------------------------------------------------*/
+    /* Fill the gyroscope structure */
     Gyro_InitStructure.Power_Mode       = I3G4250D_MODE_ACTIVE;
     Gyro_InitStructure.Output_DataRate  = I3G4250D_OUTPUT_DATARATE_1;
     Gyro_InitStructure.Axes_Enable      = I3G4250D_AXES_ENABLE;
@@ -142,7 +104,7 @@ uint8_t BSP_GYRO_Init(void)
 
     ctrl |= (uint16_t) ((Gyro_InitStructure.BlockData_Update | Gyro_InitStructure.Endianness | \
                          Gyro_InitStructure.Full_Scale) << 8);
-
+    
     /* Initialize the gyroscope */
     GyroscopeDrv->Init(ctrl);
 
@@ -153,13 +115,12 @@ uint8_t BSP_GYRO_Init(void)
                        Gyro_FilterStructure.HighPassFilter_CutOff_Frequency));
 
     /* Configure the gyroscope main parameters */
-    GyroscopeDrv->FilterConfig(ctrl);
+    GyroscopeDrv->FilterConfig(ctrl) ;
 
     GyroscopeDrv->FilterCmd(I3G4250D_HIGHPASSFILTER_ENABLE);
 
     ret = GYRO_OK;
   }
-#endif /* USE_STM32F429I_DISCOVERY_REVD */
   return ret;
 }
 
@@ -191,8 +152,8 @@ void BSP_GYRO_Reset(void)
 
 /**
   * @brief  Configures INT1 interrupt.
-  * @param  pIntConfig: pointer to a L3GD20_InterruptConfig_TypeDef 
-  *         structure that contains the configuration setting for the L3GD20 Interrupt.
+  * @param  pIntConfig: pointer to a I3G4250D_InterruptConfig_TypeDef
+  *         structure that contains the configuration setting for the I3G4250D Interrupt.
   */
 void BSP_GYRO_ITConfig(GYRO_InterruptConfigTypeDef *pIntConfig)
 {  
@@ -214,8 +175,8 @@ void BSP_GYRO_ITConfig(GYRO_InterruptConfigTypeDef *pIntConfig)
   * @brief  Enables INT1 or INT2 interrupt.
   * @param  IntPin: Interrupt pin 
   *      This parameter can be: 
-  *        @arg L3GD20_INT1
-  *        @arg L3GD20_INT2
+  *        @arg I3G4250D_INT1
+  *        @arg I3G4250D_INT2
   *        @arg I3G4250D_INT1
   *        @arg I3G4250D_INT2
   */
@@ -231,8 +192,8 @@ void BSP_GYRO_EnableIT(uint8_t IntPin)
   * @brief  Disables INT1 or INT2 interrupt.
   * @param  IntPin: Interrupt pin 
   *      This parameter can be: 
-  *        @arg L3GD20_INT1
-  *        @arg L3GD20_INT2
+  *        @arg I3G4250D_INT1
+  *        @arg I3G4250D_INT2
   *        @arg I3G4250D_INT1
   *        @arg I3G4250D_INT2
   */

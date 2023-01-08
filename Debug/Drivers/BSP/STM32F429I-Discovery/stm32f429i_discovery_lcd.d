@@ -41,15 +41,15 @@ Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_lcd.o: \
  C:/Users/Hoa/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  C:/Users/Hoa/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
  ../Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_sdram.h \
- e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\fonts.h \
+ e:\stm32_workingsspace\pingpong_game\utilities\fonts\fonts.h \
  ../Drivers/BSP/STM32F429I-Discovery/../Components/ili9341/ili9341.h \
- ../Drivers/BSP/STM32F429I-Discovery/../Components/ili9341/../Common/lcd.h \
- e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font24.c \
- e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\fonts.h \
- e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font20.c \
- e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font16.c \
- e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font12.c \
- e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font8.c
+ e:\stm32_workingsspace\pingpong_game\drivers\bsp\components\common\lcd.h \
+ e:\stm32_workingsspace\pingpong_game\utilities\fonts\font24.c \
+ e:\stm32_workingsspace\pingpong_game\utilities\fonts\fonts.h \
+ e:\stm32_workingsspace\pingpong_game\utilities\fonts\font20.c \
+ e:\stm32_workingsspace\pingpong_game\utilities\fonts\font16.c \
+ e:\stm32_workingsspace\pingpong_game\utilities\fonts\font12.c \
+ e:\stm32_workingsspace\pingpong_game\utilities\fonts\font8.c
 ../Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_lcd.h:
 ../Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery.h:
 C:/Users/Hoa/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -91,12 +91,12 @@ C:/Users/Hoa/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/STM32F4xx_HAL_
 C:/Users/Hoa/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 C:/Users/Hoa/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
 ../Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_sdram.h:
-e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\fonts.h:
+e:\stm32_workingsspace\pingpong_game\utilities\fonts\fonts.h:
 ../Drivers/BSP/STM32F429I-Discovery/../Components/ili9341/ili9341.h:
-../Drivers/BSP/STM32F429I-Discovery/../Components/ili9341/../Common/lcd.h:
-e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font24.c:
-e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\fonts.h:
-e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font20.c:
-e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font16.c:
-e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font12.c:
-e:\stm32_workingsspace\single_pingpong_game\utilities\fonts\font8.c:
+e:\stm32_workingsspace\pingpong_game\drivers\bsp\components\common\lcd.h:
+e:\stm32_workingsspace\pingpong_game\utilities\fonts\font24.c:
+e:\stm32_workingsspace\pingpong_game\utilities\fonts\fonts.h:
+e:\stm32_workingsspace\pingpong_game\utilities\fonts\font20.c:
+e:\stm32_workingsspace\pingpong_game\utilities\fonts\font16.c:
+e:\stm32_workingsspace\pingpong_game\utilities\fonts\font12.c:
+e:\stm32_workingsspace\pingpong_game\utilities\fonts\font8.c:
