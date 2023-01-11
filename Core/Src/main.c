@@ -367,7 +367,6 @@ void Task02_Init(void const * argument)
     	BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, 160, 25);
 
 
-<<<<<<< HEAD
     	sprintf(str,"%d",count_score);
     	//hien thi diem dat duoc tren man hinh
     	//noi ket chuoi
@@ -375,16 +374,6 @@ void Task02_Init(void const * argument)
     	BSP_LCD_DisplayStringAt(100,13,(uint8_t*)str,LEFT_MODE);
 
     	osDelay(50);
-=======
-  	sprintf(str,"%d",count_score);
-  	//hien thi diem dat duoc tren man hinh
-  	//noi ket chuoi
-  	//BSP_LCD_DisplayStringAtLine(1,display_score);
-  	BSP_LCD_DisplayStringAt(11,13,display_score,LEFT_MODE);
-	BSP_LCD_DisplayStringAt(100,13,(uint8_t*)str,LEFT_MODE);
-
-  	osDelay(50);
->>>>>>> f77c8cd8b4a2f35096ae2a9bf5d130cb04703e53
 
     }
     else //truong hop bong da duoc tang len
@@ -402,11 +391,7 @@ void Task02_Init(void const * argument)
     	//-- ket thuc set max height
 
  
-<<<<<<< HEAD
     	flag = 1; //flag co de nhan biet khi nao bong duoc tang len va tinh diem
-=======
-	flag = 1; //flag co de nhan biet khi nao bong duoc tang len va tinh diem
->>>>>>> f77c8cd8b4a2f35096ae2a9bf5d130cb04703e53
     	while(height!=25){
 
     		if(count_height == height) break;
