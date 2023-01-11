@@ -49,8 +49,6 @@
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi5;
 
-TIM_HandleTypeDef htim7;
-
 osThreadId Task01Handle;
 osThreadId Task02Handle;
 osThreadId Task03Handle;
@@ -58,15 +56,20 @@ osThreadId Task04Handle;
 osThreadId Task05Handle;
 /* USER CODE BEGIN PV */
 
-float xyz_rotation[3];
-float xyz_ang_rate[3];
+float xyz_rotation[3]; //rotation 3 axis vars
+float xyz_ang_rate[3]; //angle rate vars
+
 uint8_t msg_buf[128] = "Hello gyro\n\r";
-int height = 0, compare_height = 0, height_cmp_res = 0;
-int flag = 0,gameover_flag = 0;
+int height = 0, compare_height = 0;
+int flag = 0;
 int count_score = 0,count_height = 25; //khởi tạo biến tính điểm trò chơi
 char str[10]; //mang tam chua chuoi diem de chuyen doi int sang char
 uint8_t display_score[] = "Score:"; //chuỗi hiển thị điểm số đạt được ra màn hình LCD
-float roll_y; //truc y tren man hinh lcd nhung gia tri tinh toan cho bien nay la angular rate cua X gyro
+
+int RollY_Value = 160; //truc y tren man hinh lcd nhung gia tri tinh toan cho bien nay la angular rate cua X gyro
+
+//TickType_t initial_time = 0, end_time = 0,diff = 0; //get time to control gyroscope drift control angle
+
 
 /* USER CODE END PV */
 
@@ -74,12 +77,12 @@ float roll_y; //truc y tren man hinh lcd nhung gia tri tinh toan cho bien nay la
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI5_Init(void);
-static void MX_TIM7_Init(void);
 void Task01_Init(void const * argument);
 void Task02_Init(void const * argument);
 void Task03_Init(void const * argument);
 void Task04_Init(void const * argument);
 void Task05_Init(void const * argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -118,21 +121,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI5_Init();
-  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-    //Init LCD
-	BSP_LCD_Init();
 
-  //thiet lap cac thong so mac dinh ban dau cho viec hien thi ra man hinh LCD
-  BSP_LCD_LayerDefaultInit(1,SDRAM_DEVICE_ADDR);
-  BSP_LCD_SelectLayer(1);
-  BSP_LCD_DisplayOn();
-  BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
-  BSP_LCD_SetBackColor(LCD_COLOR_DARKGREEN);
-  BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
-
-  BSP_LCD_SetFont(&Font20); //set kich thuoc font cho viec hien thi text ra man hinh LCD
-  BSP_LCD_GetFont();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -172,8 +162,6 @@ int main(void)
   /* definition and creation of Task04 */
   osThreadDef(Task05, Task05_Init, osPriorityNormal, 0, 216);
   Task05Handle = osThreadCreate(osThread(Task05), NULL);
-
-
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -277,44 +265,6 @@ static void MX_SPI5_Init(void)
 }
 
 /**
-  * @brief TIM7 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM7_Init(void)
-{
-
-  /* USER CODE BEGIN TIM7_Init 0 */
-
-  /* USER CODE END TIM7_Init 0 */
-
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM7_Init 1 */
-
-  /* USER CODE END TIM7_Init 1 */
-  htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 8400;
-  htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 9;
-  htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim7, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM7_Init 2 */
-
-  /* USER CODE END TIM7_Init 2 */
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -354,15 +304,29 @@ static void MX_GPIO_Init(void)
   * @retval None
   */
 /* USER CODE END Header_Task01_Init */
-void Task01_Init(void const * argument) //Task01: Khoi tao USB Virtual COM Port, lay toc do goc 3 truc xyz tu gyro va chuyen doi sang angular rate cho ca 3 truc
-{										//Xuat gia tri sensor cung nhu cac the loai bien qua COM de debug
+void Task01_Init(void const * argument)
+{
   /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
+	MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
 
   //Init Gyro
-  BSP_GYRO_Init();
+    BSP_GYRO_Init();
+
+  //Init LCD
+	BSP_LCD_Init();
+
+ //thiet lap cac thong so mac dinh ban dau cho viec hien thi ra man hinh LCD
+	BSP_LCD_LayerDefaultInit(1,SDRAM_DEVICE_ADDR);
+	BSP_LCD_SelectLayer(1);
+	BSP_LCD_DisplayOn();
+	BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+	BSP_LCD_SetBackColor(LCD_COLOR_DARKGREEN);
+	BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
+
+	BSP_LCD_SetFont(&Font20); //set kich thuoc font cho viec hien thi text ra man hinh LCD
+	BSP_LCD_GetFont();
 
   for(;;)
   {
@@ -373,10 +337,8 @@ void Task01_Init(void const * argument) //Task01: Khoi tao USB Virtual COM Port,
 	  {
 		  xyz_ang_rate[i] = (xyz_rotation[i]/2000)*70; //lay angular rate
 	  }
-	  //sprintf(msg_buf,"x:%f\n", xyz_ang_rate[0]);
-	  //CDC_Transmit_HS(msg_buf,strlen((const char*)msg_buf)); //đoạn code được để trong comment để debug thông qua COM
 
-	  osDelay(1);
+	  osDelay(100);
   }
   /* USER CODE END 5 */
 }
@@ -390,14 +352,13 @@ void Task01_Init(void const * argument) //Task01: Khoi tao USB Virtual COM Port,
 /* USER CODE END Header_Task02_Init */
 void Task02_Init(void const * argument)
 {
-	//task2 dung de xu ly man hinh lcd tang bong tuong tac voi nguoi dung
   /* USER CODE BEGIN Task02_Init */
 
   /* Infinite loop */
   for(;;)
   {
 
-	if(xyz_ang_rate[0] >= 0){
+    if(xyz_ang_rate[0] >= 0){
 
     if(xyz_ang_rate[0] <= 25) //trang thai luc bong chua duoc tang - trang thai can bang
     {
@@ -406,21 +367,20 @@ void Task02_Init(void const * argument)
     	BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, 160, 25);
 
 
-  	  sprintf(str,"%d",count_score);
-  	  //hien thi diem dat duoc tren man hinh
-  	  //noi ket chuoi
-  	  //BSP_LCD_DisplayStringAtLine(1,display_score);
-  	  BSP_LCD_DisplayStringAt(11,13,display_score,LEFT_MODE);
+    	sprintf(str,"%d",count_score);
+    	//hien thi diem dat duoc tren man hinh
+    	//noi ket chuoi
+    	BSP_LCD_DisplayStringAt(11,13,display_score,LEFT_MODE);
+    	BSP_LCD_DisplayStringAt(100,13,(uint8_t*)str,LEFT_MODE);
 
-
-  	  osDelay(50);
+    	osDelay(50);
 
     }
     else //truong hop bong da duoc tang len
     {
     	//phu thuoc vao muc do tang bong tuc la lay tu angular rate x quyet dinh do to cua bong
-      //do to cua bong cung chinh la khoang cach giua mat vot voi diem can bang
-      //luc nay cho bong duoc tang len max roi tu tu ha xuong den diem can bang
+    	//do to cua bong cung chinh la khoang cach giua mat vot voi diem can bang
+    	//luc nay cho bong duoc tang len max roi tu tu ha xuong den diem can bang
     	height = fabs(xyz_ang_rate[0])/30 + 25;
 
     	//neu height qua lon chung ta se set max height, tranh truong hop bong vuot ra ngoai pham vi cho phep
@@ -431,15 +391,16 @@ void Task02_Init(void const * argument)
     	//-- ket thuc set max height
 
  
-		  flag = 1; //flag co de nhan biet khi nao bong duoc tang len va tinh diem
+    	flag = 1; //flag co de nhan biet khi nao bong duoc tang len va tinh diem
     	while(height!=25){
 
     		if(count_height == height) break;
 
     		++count_height;
 
-    		BSP_LCD_DrawCircle(BSP_LCD_GetXSize() - 120, 160, count_height);
-    		BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, 160, count_height);
+    		BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+    		BSP_LCD_DrawCircle(BSP_LCD_GetXSize() - 120, RollY_Value, count_height);
+    		BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, RollY_Value, count_height);
 
     		BSP_LCD_DisplayStringAt(11,13,display_score,LEFT_MODE);
     		BSP_LCD_DisplayStringAt(100,13,(uint8_t*)str,LEFT_MODE);
@@ -452,8 +413,8 @@ void Task02_Init(void const * argument)
     	{
     		count_height--;
     		BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
-    		BSP_LCD_DrawCircle(BSP_LCD_GetXSize() - 120, 160, count_height);
-    		BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, 160, count_height);
+    		BSP_LCD_DrawCircle(BSP_LCD_GetXSize() - 120, RollY_Value, count_height);
+    		BSP_LCD_FillCircle(BSP_LCD_GetXSize() - 120, RollY_Value, count_height);
 
     		sprintf(str,"%d",count_score);
     		//hien thi diem dat duoc tren man hinh
@@ -476,13 +437,13 @@ void Task02_Init(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_Task03_Init */
-void Task03_Init(void const * argument) //Task03: Xuat do cao bong qua Virtual COM port
+void Task03_Init(void const * argument)
 {
   /* USER CODE BEGIN Task03_Init */
   /* Infinite loop */
   for(;;)
   {
-  	sprintf(msg_buf,"Do cao bong:%d\n", count_height);
+	sprintf(msg_buf,"Do cao bong:%d\n", count_height);
   	CDC_Transmit_HS(msg_buf,strlen((const char*)msg_buf));
     osDelay(100); // cu 100ms xuat do cao bong 1 lan
   }
@@ -498,8 +459,6 @@ void Task03_Init(void const * argument) //Task03: Xuat do cao bong qua Virtual C
 /* USER CODE END Header_Task04_Init */
 void Task04_Init(void const * argument)
 {
-  //Task 04 dùng để hiển thị đèn xanh khi tâng bóng, đèn đỏ khi tâng bóng hụt
-  // Hiện thực chức năng tính điểm
   /* USER CODE BEGIN Task04_Init */
   /* Infinite loop */
   for(;;)
@@ -509,7 +468,7 @@ void Task04_Init(void const * argument)
 	{
 		++count_score;
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_13, GPIO_PIN_SET);
-		osDelay(1000);
+		osDelay(1700);
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_13, GPIO_PIN_RESET);
 
 		  flag = 0;
@@ -522,7 +481,7 @@ void Task04_Init(void const * argument)
 			    compare_height = 110; //ep height khong vuot tam
 			}
 			//-- ket thuc set max height
-			if(compare_height >= 80)
+			if(compare_height >= 60)
 			{
 				//---- GAME OVER SCREEN ----
 				//BEGIN
@@ -544,11 +503,10 @@ void Task04_Init(void const * argument)
 			}
 
 	}
-    osDelay(1);
+	osDelay(1);
   }
   /* USER CODE END Task04_Init */
 }
-
 
 /* USER CODE BEGIN Header_Task05_Init */
 /**
@@ -557,25 +515,34 @@ void Task04_Init(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_Task05_Init */
-void Task05_Init(void const * argument) //Task05 để sẵn hiện tại chưa sử dụng, nhưng mục đích của task này là để khiển bóng bay theo phương chiều
+void Task05_Init(void const * argument)
 {
-	//task 5 dung de cho bong bay theo chieu ngang bay ra ria LCD se "dap nguoc tro lai" tuc la lan nhu nao dung de no rot ra man hinh lcd la duoc
-	//cho dung im bat dong o ria cung oke luon :D
   /* USER CODE BEGIN Task05_Init */
-  /* Infinite loop */
+	//Task05 dung de lan bong theo chieu nang kit
+	//giai thuat hom truoc minh tinh angle lay truoc tru sau ra duoc xap xi 100 do co khi lai dung vi neu tinh
+	//theo thuoc do do thi neu KIT nam nhu the kha nang cao tu 90 do den 100 do hon co ve chinh xac
+	/* Infinite loop */
   for(;;)
   {
-	//angular rate y [1] angular rate z [2] angular rate z co khi minh cha bao gio dung
-	  //thi oke
-	  //doan nay minh co the lay angular rate y de xu ly tuy nhien thi neu dung thi minh phai lay goc
-	  // dung moi 100s chang han
-	  //nhan biet duoc do nghieng, thi bong se chay xuong chang han the ma tiec gio UART hu roi thi debug sao ta
+	//Version1: sử dụng trực tiếp angular rate tu tinh
+	if(xyz_ang_rate >= 180 && xyz_ang_rate[0] <= 190) //trang thai lan can bang
+	{
+		RollY_Value = 160;
+	}
 
-  	osDelay(1);
+	if(xyz_ang_rate[0]> 190) //phat hien KIT nghieng thi bat dau lan banh
+	{
+		++RollY_Value;
+		if(RollY_Value==295)
+		{
+			RollY_Value = 160;
+		}
+	}
+
+    osDelay(50);
   }
   /* USER CODE END Task05_Init */
 }
-
 
 /**
   * @brief  Period elapsed callback in non blocking mode

@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    stm32f429i_discovery_gyroscope.h
   * @author  MCD Application Team
-  * @brief   This file contains definitions for stm32f429i_discovery_gyroscope.c 
+  * @brief   This file contains definitions for stm32f429i_discovery_gyroscope.c
   *          firmware driver.
   ******************************************************************************
   * @attention
@@ -16,7 +16,7 @@
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F429I_DISCOVERY_GYROSCOPE_H
 #define __STM32F429I_DISCOVERY_GYROSCOPE_H
@@ -28,23 +28,26 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f429i_discovery.h"
 /* Include Gyroscope component driver */
+#include "../Components/l3gd20/l3gd20.h"
+#if defined(USE_STM32F429I_DISCOVERY_REVD)
 #include "../Components/i3g4250d/i3g4250d.h"
+#endif /* USE_STM32F429I_DISCOVERY_REVD */
 /** @addtogroup BSP
   * @{
   */
-  
+
 /** @addtogroup STM32F429I_DISCOVERY
   * @{
-  */ 
+  */
 
 /** @addtogroup STM32F429I_DISCOVERY_GYROSCOPE
   * @{
   */
-  
+
 /** @defgroup STM32F429I_DISCOVERY_GYROSCOPE_Exported_Types STM32F429I DISCOVERY GYROSCOPE Exported Types
   * @{
   */
-typedef enum 
+typedef enum
 {
   GYRO_OK = 0,
   GYRO_ERROR = 1,
@@ -53,7 +56,7 @@ typedef enum
 /**
   * @}
   */
-  
+
 /** @defgroup STM32F429I_DISCOVERY_GYROSCOPE_Exported_Constants STM32F429I DISCOVERY GYROSCOPE Exported Constants
   * @{
   */
@@ -67,11 +70,11 @@ typedef enum
 /**
   * @}
   */
- 
+
 /** @defgroup STM32F429I_DISCOVERY_GYROSCOPE_Exported_Functions STM32F429I DISCOVERY GYROSCOPE Exported Functions
   * @{
   */
-/* Gyroscope Functions */ 
+/* Gyroscope Functions */
 uint8_t BSP_GYRO_Init(void);
 void    BSP_GYRO_Reset(void);
 uint8_t BSP_GYRO_ReadID(void);
@@ -86,18 +89,20 @@ void    BSP_GYRO_GetXYZ(float* pfData);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* __STM32F429I_DISCOVERY_GYROSCOPE_H */
+
+
